@@ -28,6 +28,9 @@ crct = [mat001.task.timing.correct];
 all functions have minimal help. In Matlab/ocatve, see e.g. `help audodd`.
 
 * `audodd.m` -- edit to change response keys and screen size | entrence to task, general wrapper
+
+* `testSetup.m` -- run to test functions on a new computer, edit if new problems need to be tested
+
 * `PTBsetup.m` -- edit to change bg color | general psychtoolbox setup, launch screen
 * `instructions.m` -- edit to change instructions | dispalys instructions on a screen
 * `loadSounds.m`  -- edit to change sounds and order | load (cache) sounds and set play order
