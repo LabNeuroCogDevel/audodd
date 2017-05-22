@@ -8,7 +8,15 @@ It is adapted from the task developed by xxx described in *[Auditory Oddball fMR
 In matlab or octave with psychtoolbox installed:
 
 ```matlab
-audodd subjectID
+%% RUN
+audodd 001
+
+%% EXPLORE
+mat001 = load('mats/001_20170522131351.mat' );
+rt = [mat001.task.timing.rt];
+crct = [mat001.task.timing.correct];
+% mean: all, correct, incorrect
+[ mean(rt(rt>0)), mean(rt(crct)), mean(rt(~crct & rt>0 )) ]
 ```
 
 ## Notes
@@ -24,10 +32,10 @@ all functions have minimal help. In Matlab/ocatve, see e.g. `help audodd`.
 * `instructions.m` -- edit to change instructions | dispalys instructions on a screen
 * `loadSounds.m`  -- edit to change sounds and order | load (cache) sounds and set play order
 * `fixation.m`  -- edit to change size/color of fixation cross | show fixation cross
-* `runTrial.m` -- edit to change what is recorded | run a trial 
+* `runTrial.m` -- edit to change what trial info recorded | run a trial 
 * `waitForKey.m` -- edit to change fastest allowable response time | return response and keypress time
 * `stimuli/*wav` -- actual sound stimuli. TODO: fix freq of std and target
-* `playsnd.m`  -- help only, no need to edit
+* `playsnd.m`  -- helper, no need to edit
 
 ### testing/exploring individual functions
 

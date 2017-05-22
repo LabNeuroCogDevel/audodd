@@ -1,8 +1,5 @@
 function cleanup()
-   try
-     pahandle=playsnd([],[]);
-     PsychPortAudio('Close', pahandle);
-   end
+   PsychPortAudio('Close');
    sca;
    diary off;
 end

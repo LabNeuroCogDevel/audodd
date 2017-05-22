@@ -2,3 +2,5 @@
 .*swp
 octave-workspace
 presentation/
+logs/
+mats/

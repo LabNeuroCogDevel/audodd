@@ -71,7 +71,7 @@ function exampleTrial(w,snds,sndname,acceptkeys)
    info.correct=0;
    while(~info.correct)
       fixation(w,[]);
-      info=runTrial(sndname,snds.(sndname) ,acceptkeys,GetSecs(),GetSecs()+2)
+      info=runTrial(sndname,snds.(sndname) ,acceptkeys,GetSecs(),GetSecs()+2);
       if(~info.correct) 
         drawAndKey(w,wrongTxt);
       else

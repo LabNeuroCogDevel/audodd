@@ -6,11 +6,17 @@ function onset = playsnd(snd,idealtime)
 
  %% keep pahandle local to this function
  persistent pahandle
+
+ % get a new handle if no snd is provided
+ % without this, initilization at start of audodd will error on multplie runs
+ if isempty(snd), pahandle=[]; end
+
  if isempty(pahandle)
   % settings for all sounds, enforced by loadSounds.m
   freq=44100;
   nrchannels=2;
 
+  fprintf('opening audio handle\n');
   pahandle = PsychPortAudio('Open', [], [], 0, freq, nrchannels);
  end
 

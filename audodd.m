@@ -4,12 +4,16 @@ function res = audodd(varargin)
 % USAGE:
 %  oddaud 001
 
+
 %% DEALING WITH A PTB CRASH
 % if psychtoolbox crashes before it can shutdown the screen
 % you'll have to kill it manually (without visual feedback -- eg. wont be able to see what you type):
 % 1. ctrl+c 
 % 2. blindly type: sca [enter]
 % 3. if nothing happens, alt+tab(+tab+tab...) to matlab and start at step 1 agin
+
+%% cleanup anything that happened before
+cleanup
 
 %% SETTINGS
 % times in seconds
@@ -75,7 +79,7 @@ matfile=fullfile('mats',[savename,'.mat'])
 
 %% keep track of everything
 diary(logfile)
-fprintf('starting task for %s @scannerStart=%.02f\n',subjid,scannerStart)l
+fprintf('starting task for %s\n',subjid);
 
 
 %% setup decent psychtoolbox defaults
@@ -115,7 +119,7 @@ DrawFormattedText(w,waitforscannertxt,'center','center');
 Screen(w,'Flip');
 
 [~,ScannerStartTime]=waitForKey(scannerKey,Inf);
-fprintf('scannerStart\t%.02f\n',scannerStart);
+fprintf('scannerStart\t%.02f\n',ScannerStartTime);
 
 
 % bring up fixation screen (last screen flip -- screen doesn't change after this)
@@ -176,7 +180,7 @@ fprintf('cleanup\t%.02f\n',cleanupTime);
 %% final save
 task.finishtime= finishTime;
 task.cleanuptime= cleanupTime;
-save(matfile,'task')
+save(matfile,'task','subjid')
 
 cleanup();
 

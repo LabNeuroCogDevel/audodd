@@ -58,6 +58,6 @@ function w = PTBsetup(screenRes)
 
 
      % make sure output directories exist
-     if ~exist('logs','dir'), mkdir('log');  end
+     if ~exist('logs','dir'), mkdir('logs');  end
      if ~exist('mats','dir'), mkdir('mats'); end
 end
