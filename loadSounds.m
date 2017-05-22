@@ -1,40 +1,48 @@
-function loadSounds()
+function [snd sndlist]=loadSounds()
+% LOADSOUNDS - read and order sound files in stimuli/*wav
+%  build in check for stereo and consitant freq
+%  --> means "fixing" target and standard sounds (48000 -> 44100 Hz)
+% output:
+% - snd is a structure with sound matrixs; e.g. snd.std = matrix: 6615x2 
+% - sndlist is a cell of strings representing fieldnames to snd 
+%   in the order the sounds should be played
 
+%% files and order
 % taken from presentation/aud_p3-1.70.sce
-snd_fname.std    ='stimuli/1000HZ_150ms.wav'                 
-snd_fname.tgt    ='stimuli/2000HZ_150ms.wav'                 
-snd_fname.novel1 ='stimuli/ZCROW_new150.wav'                 
-snd_fname.novel2 ='stimuli/ZNOSE_new150.wav'                 
-snd_fname.novel3 ='stimuli/ZWHIP_new150.wav'                 
-snd_fname.novel4 ='stimuli/ZWHALE_new150.wav'                
-snd_fname.novel5 ='stimuli/ZPINBALL_new150.wav'              
-snd_fname.novel6 ='stimuli/ZKNOCK_new150.wav'                
-snd_fname.novel7 ='stimuli/ZHICCUP_new150.wav'               
-snd_fname.novel8 ='stimuli/ZHERON_new150.wav'                
-snd_fname.novel8 ='stimuli/ZHERON_new150_variant.wav'        
-snd_fname.novel9 ='stimuli/ZMOSQUI_new150.wav'               
-snd_fname.novel10='stimuli/ZHEART_new150.wav'                
-snd_fname.novel11='stimuli/ZTOILET_new150.wav'               
-snd_fname.novel12='stimuli/ZTRAIN_new150.wav'                
-snd_fname.novel13='stimuli/ZWHISTLE_new150.wav'              
-snd_fname.novel14='stimuli/ZTHROAT1_new150.wav'              
-snd_fname.novel15='stimuli/ZCRICKET_new150.wav'              
-snd_fname.novel16='stimuli/ZRACE_new150.wav'                 
-snd_fname.novel17='stimuli/ZTURKEY_new150.wav'               
-snd_fname.novel18='stimuli/ZCUCKOO_new150.wav'               
-snd_fname.novel19='stimuli/ZDENTIST_new150.wav'              
-snd_fname.novel20='stimuli/ZRAVEN_new150.wav'                
-snd_fname.novel21='stimuli/ZGOOSE_new150.wav'                
-snd_fname.novel22='stimuli/ZGUN_new150.wav'                  
-snd_fname.novel23='stimuli/ZPIG1_new150.wav'                 
-snd_fname.novel24='stimuli/ZRATTLE_new150.wav'               
-snd_fname.novel25='stimuli/ZHOLLOW_new150.wav'               
-snd_fname.novel26='stimuli/ZHORSE1_new150.wav'               
-snd_fname.novel27='stimuli/ZHELICO_new150.wav'               
-snd_fname.novel28='stimuli/ZHAMMER_new150.wav'               
-snd_fname.novel29='stimuli/ZSNORE_new150.wav'                
-snd_fname.novel29='stimuli/ZHERON_new150_variant.wav'        
-snd_fname.novel30='stimuli/ZGADGET_new150.wav'               
+snd_fname.std    ='stimuli/1000HZ_150ms.wav'                 ;
+snd_fname.tgt    ='stimuli/2000HZ_150ms.wav'                 ;
+snd_fname.novel1 ='stimuli/ZCROW_new150.wav'                 ;
+snd_fname.novel2 ='stimuli/ZNOSE_new150.wav'                 ;
+snd_fname.novel3 ='stimuli/ZWHIP_new150.wav'                 ;
+snd_fname.novel4 ='stimuli/ZWHALE_new150.wav'                ;
+snd_fname.novel5 ='stimuli/ZPINBALL_new150.wav'              ;
+snd_fname.novel6 ='stimuli/ZKNOCK_new150.wav'                ;
+snd_fname.novel7 ='stimuli/ZHICCUP_new150.wav'               ;
+snd_fname.novel8 ='stimuli/ZHERON_new150.wav'                ;
+snd_fname.novel8 ='stimuli/ZHERON_new150_variant.wav'        ;
+snd_fname.novel9 ='stimuli/ZMOSQUI_new150.wav'               ;
+snd_fname.novel10='stimuli/ZHEART_new150.wav'                ;
+snd_fname.novel11='stimuli/ZTOILET_new150.wav'               ;
+snd_fname.novel12='stimuli/ZTRAIN_new150.wav'                ;
+snd_fname.novel13='stimuli/ZWHISTLE_new150.wav'              ;
+snd_fname.novel14='stimuli/ZTHROAT1_new150.wav'              ;
+snd_fname.novel15='stimuli/ZCRICKET_new150.wav'              ;
+snd_fname.novel16='stimuli/ZRACE_new150.wav'                 ;
+snd_fname.novel17='stimuli/ZTURKEY_new150.wav'               ;
+snd_fname.novel18='stimuli/ZCUCKOO_new150.wav'               ;
+snd_fname.novel19='stimuli/ZDENTIST_new150.wav'              ;
+snd_fname.novel20='stimuli/ZRAVEN_new150.wav'                ;
+snd_fname.novel21='stimuli/ZGOOSE_new150.wav'                ;
+snd_fname.novel22='stimuli/ZGUN_new150.wav'                  ;
+snd_fname.novel23='stimuli/ZPIG1_new150.wav'                 ;
+snd_fname.novel24='stimuli/ZRATTLE_new150.wav'               ;
+snd_fname.novel25='stimuli/ZHOLLOW_new150.wav'               ;
+snd_fname.novel26='stimuli/ZHORSE1_new150.wav'               ;
+snd_fname.novel27='stimuli/ZHELICO_new150.wav'               ;
+snd_fname.novel28='stimuli/ZHAMMER_new150.wav'               ;
+snd_fname.novel29='stimuli/ZSNORE_new150.wav'                ;
+snd_fname.novel29='stimuli/ZHERON_new150_variant.wav'        ;
+snd_fname.novel30='stimuli/ZGADGET_new150.wav'               ;
 
 sndlist = {
   'std', ...
@@ -133,7 +141,41 @@ sndlist = {
   'std', ...
   'novel30', ...
   'std', 'std', 'std', 'std', 'std', 'std', 'std', 'std', 'std', ...
-}
+};
 
 
+%% load sounds
+% go through each sound file name in the structure 'snd_fname'
+% and load the data into a new stucture 'snd'
+freq=44100;
+for sname = fieldnames(snd_fname)'
+  % get the actual fieldname out from the embeded cell
+  sndname=sname{1};
+  % what file do we want to load?
+  sndfilename=snd_fname.(sndname);
+  [ wavedata, f ] = psychwavread( sndfilename );
+
+
+
+  %% check that all sounds have the same freq and channel number
+  if f ~= freq 
+    warning(sprintf('snd file %s has freq %d (not %d); fixing',sndfilename,f,freq));
+    % fix freq
+    % https://www.mathworks.com/help/signal/ug/changing-signal-sample-rate.html
+    [P,Q] = rat(freq/f);
+    % in octave, need: pkg load signal
+    % (after running once: pkg install -forge control signal
+    wavedata = resample(wavedata,P,Q);
+  end
+  
+  nchan=size(wavedata,2);
+  if nchan ~= 2
+    warning(sprintf('snd file %s has 1 channel (not 2); fixing',sndfilename,f,nchan));
+    wavedata=[wavedata wavedata];
+  end
+
+  %% add data to big structure
+  snd.(sndname) = wavedata;
+
+end
 

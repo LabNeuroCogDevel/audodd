@@ -49,4 +49,15 @@ function w = PTBsetup(screenRes)
 
      % for sound
      InitializePsychSound();
+
+     % specific to octave
+     if exist('OCTAVE_VERSION','builtin')
+       pkg load signal; % for resample, used to load sounds
+       more off; % stream results to the console
+     end
+
+
+     % make sure output directories exist
+     if ~exist('logs','dir'), mkdir('log');  end
+     if ~exist('mats','dir'), mkdir('mats'); end
 end

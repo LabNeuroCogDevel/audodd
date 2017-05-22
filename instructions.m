@@ -1,6 +1,4 @@
-function instructions(w)
- %% display text
- txtColor=[0 0 0]; % rgb: black
+function instructions(w,snds,acceptkeys)
 
  % N.B.  * matlab '...' allows us to breakup what would be a single line into multiple lines
  %         so this is a 1xN array (NxM would break PTB's drawFormattedText)
@@ -18,11 +16,66 @@ function instructions(w)
  ];
 
  %% show instructions
+
+ % use inline function (in code at bottom of file)
+ % to draw the text and wait for any key to be pushed
+ drawAndKey(w,txt)
+
+
+ %% test the sounds
+
+ % standard
+ drawAndKey(w,'Ready for the std sound?');
+ playsnd(snds.std,GetSecs());
+
+ % target
+ drawAndKey(w,'That was standard. Next is target');
+ playsnd(snds.tgt,GetSecs());
+
+ % both
+ drawAndKey(w,'Now we will play standard then target');
+ playsnd(snds.std,GetSecs());
+ WaitSecs(.5)
+ playsnd(snds.tgt,GetSecs());
+
+ %% if function was given acceptable keys
+ % test the subject knows them
+ if ~isempty(acceptkeys)
+   drawAndKey(w,'Lets Pratice');
+   exampleTrial(w,snds,'std',acceptkeys);
+   exampleTrial(w,snds,'tgt',acceptkeys);
+ end
+ 
+ % all done with the instructions
+ drawAndKey(w,'Now Lets play the game');
+
+end
+
+function drawAndKey(w,txt)
+ %% display text
+ txtColor=[0 0 0]; % rgb: black
+
+ txt=[txt '\n\nPush any key'];
  DrawFormattedText(w, txt, 'center','center', txtColor);
  % "flip" what we've drawn onto the display
  Screen('Flip', w);
+ % wait 300 seconds, then advance after keypress
+ WaitSecs(.3);
+ KbWait();
+end
 
- % TODO:
- %  test subject knows which key is which
+function exampleTrial(w,snds,sndname,acceptkeys)
+   correctTxt='Great!';
+   wrongTxt='Try Again';
 
+   info.correct=0;
+   while(~info.correct)
+      fixation(w,[]);
+      info=runTrial(sndname,snds.(sndname) ,acceptkeys,GetSecs(),GetSecs()+2)
+      if(~info.correct) 
+        drawAndKey(w,wrongTxt);
+      else
+        drawAndKey(w,correctTxt);
+      end
+   end
 end
