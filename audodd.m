@@ -19,7 +19,7 @@ cleanup
 % times in seconds
 start_hrf_wait = 1;   % should probably be >= 6
 finish_hrf_wait= 1;   % should probably be >= 12
-trial_dur      = 1.5; % how long is each trial
+trial_dur      =   2; % how long is each trial
 snd_load_time  =  .1; % how much time before trial end to devote to processing
                       %  no key press is accepted in this window
 
